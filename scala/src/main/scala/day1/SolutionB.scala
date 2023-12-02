@@ -16,8 +16,11 @@ object SolutionB extends App {
 
   val result = input
     .split("\n")
-    .map(line => "(?=([0-9]|one|two|three|four|five|six|seven|eight|nine))".r.findAllMatchIn(line).map(_.group(1)).toList)
-    .map(_.map(lookup.apply))
+    .map(line => "(?=([0-9]|one|two|three|four|five|six|seven|eight|nine))".r.findAllMatchIn(line)
+      .map(_.group(1))
+      .map(lookup.apply)
+      .toList
+    )
     .map(item => (item.head * 10) + item.last)
     .sum
 
