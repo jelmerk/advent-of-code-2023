@@ -2,15 +2,15 @@ package day2
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.DataFrameNaFunctions
+
 object SolutionA extends App {
 
   val spark = SparkSession.builder().master("local[*]").getOrCreate()
 
   import spark.implicits._
 
-//  spark.read.text("/Users/jkuperus/dev/playground/advent-of-code-2023/scala/src/main/resources/day2/input_example_a.txt")
-  spark.read.text("/Users/jkuperus/dev/playground/advent-of-code-2023/scala/src/main/resources/day2/input_a.txt")
+  spark.read.text("/Users/jkuperus/dev/playground/advent-of-code-2023/scala/src/main/resources/day1/input_example_a.txt")
+//  spark.read.text("/Users/jkuperus/dev/playground/advent-of-code-2023/scala/src/main/resources/day2/input_a.txt")
     .select(
       regexp_extract($"value", """^Game ([0-9]+):\s(.*)""", 1).cast("int").as("game"),
       posexplode(split(regexp_extract($"value", """Game ([0-9]+):\s(.*)""", 2), "; "))

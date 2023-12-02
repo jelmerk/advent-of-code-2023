@@ -21,7 +21,7 @@ object SolutionB extends App {
       .map(lookup.apply)
       .toList
     )
-    .map(item => (item.head * 10) + item.last)
+    .map(item => item.head * 10 + item.last)
     .sum
 
   println(result)

@@ -22,11 +22,10 @@ object SolutionB extends App {
             val Array(count, color) = pull.split(" ")
             color -> count.toLong
           }
-
         }
     }
     .map {
-      case (game, turns) =>
+      case (_, turns) =>
         turns
           .flatMap { _.reduceByKey(_ + _) }
           .reduceByKey { case (a, b) => math.max(a, b)}
@@ -36,6 +35,4 @@ object SolutionB extends App {
     .sum
 
   println(result)
-
-
 }
