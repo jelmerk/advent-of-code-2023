@@ -4,27 +4,13 @@ import java.nio.file.{Files, Paths}
 
 object SolutionB extends App {
 
-  val lookup = Map(
-    "0" -> 0,
-    "1" -> 1,
-    "2" -> 2,
-    "3" -> 3,
-    "4" -> 4,
-    "5" -> 5,
-    "6" -> 6,
-    "7" -> 7,
-    "8" -> 8,
-    "9" -> 9,
-    "one" -> 1,
-    "two" -> 2,
-    "three" -> 3,
-    "four" -> 4,
-    "five" -> 5,
-    "six" -> 6,
-    "seven" -> 7,
-    "eight" -> 8,
-    "nine" -> 9,
-  )
+  val words = Seq("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
+    .zipWithIndex
+    .toMap
+
+  val numbers = (0 to 9).map(_.toString).zipWithIndex.toMap
+
+  val lookup = words ++ numbers
 
   val input = Files.readString(Paths.get("src/main/resources/day1/input_a.txt"))
 
