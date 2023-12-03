@@ -8,7 +8,7 @@ object SolutionB extends App {
 
   import spark.implicits._
 
-  def to_int(col: Column) =
+  def to_int(col: Column): Column =
      when(col === "one", lit(1))
     .when(col === "two", lit(2))
     .when(col === "three", lit(3))
