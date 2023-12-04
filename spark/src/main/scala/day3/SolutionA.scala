@@ -1,6 +1,7 @@
 package day3
 
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 
 object SolutionA extends App {
@@ -8,13 +9,21 @@ object SolutionA extends App {
 
   import spark.implicits._
 
-//    spark.read.text("/Users/jkuperus/dev/playground/advent-of-code-2023/spark/src/main/resources/day1/input_example_a.txt")
-    spark.read.text("/Users/jkuperus/dev/playground/advent-of-code-2023/scala/src/main/resources/day3/input_a.txt")
+    val window = Window.partitionBy("line").orderBy("pos")
 
+    val items = spark.read.option("wholetext", true).text("/Users/jkuperus/dev/playground/advent-of-code-2023/spark/src/main/resources/day3/input_example_a.txt")
+//    spark.read.option("wholetext", true).text("/Users/jkuperus/dev/playground/advent-of-code-2023/scala/src/main/resources/day3/input_a.txt")
+      .select(posexplode(split($"value", "\n")))
+      .select($"pos".alias("line"), posexplode(regexp_extract_all($"col", lit("""([0-9]+|.)"""))))
+      .withColumn("start", coalesce(lag(sum(length($"col")).over(window), 1).over(window), lit(0)))
+      .withColumn("end", $"start" + length($"col"))
+      .filter($"col" =!= ".")
+      .drop("pos")
 
-//      .select($"value", regexp_extract_all($"value", lit("""([0-9])""")).cast("array<int>").alias("numbers"))
-//      .withColumn("first", element_at($"numbers", 1))
-//      .withColumn("last", element_at($"numbers", -1))
-//      .select(sum($"first" * 10 + $"last").as("result"))
-//      .show(false)
+    val partNumbers = items.filter($"col" rlike "[0-9]+")
+
+    val symbols = items.filter(not($"col" rlike "[0-9]+"))
+
+    partNumbers.show(1000, false)
+//      .printSchema()
 }
